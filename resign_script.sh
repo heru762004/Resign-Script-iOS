@@ -85,6 +85,9 @@ cp embedded.mobileprovision Payload/ABC.app/embedded.mobileprovision
 
 codesign -f -s "iPhone Distribution: XXXXX" Payload/ABC.app/Frameworks/*
 
+#For XCode >= 10.0, all IPA contains Frameworks which has arm64e architecture. It should be removed
+cp ./SwiftSupport/iphoneos/**.dylib Payload/NETSPayApp.app/Frameworks/
+
 rm -rf Payload/ABC.app/libswiftRemoteMirror.dylib
 
 codesign -d -vv --entitlements entitlements.plist Payload/ABC.app/ABC
