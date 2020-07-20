@@ -65,7 +65,8 @@ rm -rf Payload/ABC.app/PlugIns/ABCService.appex/_CodeSignature
 cp ../template/PROD_Appex/Info.plist Payload/ABC.app/PlugIns/ABCService.appex/Info.plist
 cp ../template/PROD_Appex/embedded.mobileprovision Payload/ABC.app/PlugIns/ABCService.appex/embedded.mobileprovision
 
-codesign -d -vv --entitlements entitlements.plist Payload/ABC.app/PlugIns/ABCService.appex/ABCService
+#better use this to avoid the special char on entitlements
+codesign -d --entitlements :entitlements.plist Payload/ABC.app/PlugIns/ABCService.appex/ABCService
 #read -p "enter to continue"
 cp ../template/PROD_Appex/entitlements.plist entitlements.plist
 #read -p "enter to continue"
@@ -85,12 +86,13 @@ cp embedded.mobileprovision Payload/ABC.app/embedded.mobileprovision
 
 codesign -f -s "iPhone Distribution: XXXXX" Payload/ABC.app/Frameworks/*
 
-#For XCode >= 10.0, all IPA contains Frameworks which has arm64e architecture. It should be removed
-cp ./SwiftSupport/iphoneos/**.dylib Payload/NETSPayApp.app/Frameworks/
+#For XCode 10.x, all IPA contains Frameworks which has arm64e architecture. It should be removed
+#For XCode 11.x, Apple already can accept arm64e
+#cp ./SwiftSupport/iphoneos/**.dylib Payload/NETSPayApp.app/Frameworks/
 
 rm -rf Payload/ABC.app/libswiftRemoteMirror.dylib
-
-codesign -d -vv --entitlements entitlements.plist Payload/ABC.app/ABC
+#better use this to avoid special char on entitlements
+codesign -d --entitlements :entitlements.plist Payload/ABC.app/ABC
 #read -p "enter to continue"
 cp ../template/entitlements.plist entitlements.plist
 codesign -vfs "iPhone Distribution: XXXX" --entitlements entitlements.plist Payload/ABC.app
